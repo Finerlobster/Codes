@@ -12,8 +12,10 @@ function GetRandomTeamPlayer(team)
 end
 
 function MakeTeam()
+	blue = {}
+	red = {}
 	for k,v in pairs(tfm.get.room.playerList) do
-		if #blue <= #red then
+		if #red <= #blue then
 			table.insert(red, k)
 		else
 			table.insert(blue, k)
@@ -39,25 +41,21 @@ function eventChatCommand(player, cmd)
 	if cmd == "team" then
 		ui.addPopup ( 3, 0, "blue: " .. blue[1] .. "\n red: " .. red[1] .."", nil, 100, 150, 100)
 	end
-	if cmd == "lua_off" then
-		system.exit()
-	end 
 end
 
 function eventNewGame()
-	MakeTeam()
 	tfm.exec.setGameTime(20)
 	for k,v in pairs(red) do
 		tfm.exec.setNameColor(v, 0000)
 		tfm.exec.setVampirePlayer(v)
 		tfm.exec.movePlayer(v, 550, 360)
-		tfm.exec.setPlayerScore(v, 0, false)
+
 	end
 	for k,v in pairs(blue) do
-		tfm.exec.setPlayerScore(v, 1, true)
 		tfm.exec.setNameColor(v, 242424)
 		tfm.exec.giveMeep(v)
 	end
+	MakeTeam()
 end
 
 function eventPlayerWon ( playerName, timeElapsed, timeElapsedSinceRespawn )
